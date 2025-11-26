@@ -14,7 +14,7 @@ app.use(
     origin: "*", // allow all origins
     methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
     allowedHeaders: ["Origin", "Content-Type", "Authorization"],
-    credentials: true, // note: credentials only work if origin is not '*'
+    credentials: false, // note: credentials only work if origin is not '*'
   })
 );
 
