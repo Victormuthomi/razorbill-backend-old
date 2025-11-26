@@ -7,14 +7,9 @@ const PORT = process.env.PORT || 5000;
 const app = express();
 
 // ------------------------
-// CORS Configuration
+// CORS: Allow ALL origins, headers, methods
 // ------------------------
-const corsOptions = {
-  origin: ["capacitor://localhost", "http://localhost", "https://localhost"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
 // ------------------------
@@ -48,6 +43,7 @@ app.post("/ask", async (req, res) => {
     const answer =
       response.data.choices?.[0]?.message?.content ||
       "Sorry, I couldn't answer that.";
+
     res.json({ reply: answer });
   } catch (error) {
     console.error("🔥 OpenRouter error:", error.response?.data || error.message);
@@ -68,6 +64,7 @@ app.use("/api", async (req, res) => {
         "User-Agent": req.headers["user-agent"] || "Mozilla/5.0",
       },
     });
+
     res.json(response.data);
   } catch (error) {
     console.error("🔥 Proxy error:", error.message);
