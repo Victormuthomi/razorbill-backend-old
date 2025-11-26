@@ -6,27 +6,12 @@ require("dotenv").config();
 const PORT = process.env.PORT || 5000;
 const app = express();
 
-// ------------------------
-// CORS Configuration
-// ------------------------
-const corsOptions = {
-  origin: ["capacitor://localhost", "http://localhost", "https://localhost"],
-  methods: ["GET", "POST", "PUT", "DELETE"],
-  allowedHeaders: ["Content-Type", "Authorization", "X-Requested-With"],
-};
-app.use(cors(corsOptions));
+app.use(cors());
 app.use(express.json());
 
-// ------------------------
-// Health Check Route
-// ------------------------
-app.get("/health", (req, res) => {
-  res.json({ status: "ok", message: "Backend is running!" });
-});
-
-// ------------------------
-// OpenRouter GPT Route
-// ------------------------
+/**
+ * 🔁 OpenRouter GPT route
+ */
 app.post("/ask", async (req, res) => {
   const question = req.body.question;
 
@@ -55,9 +40,10 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-// ------------------------
-// Universal Proxy for streamed.su API
-// ------------------------
+/**
+ * 🌐 Universal proxy for streamed.su/api/*
+ * Example: GET /api/matches/fight/popular → forwards to https://streamed.su/api/matches/fight/popular
+ */
 app.use("/api", async (req, res) => {
   const streamedPath = req.originalUrl.replace("/api", "");
   const targetUrl = `https://streamed.su/api${streamedPath}`;
@@ -78,9 +64,6 @@ app.use("/api", async (req, res) => {
   }
 });
 
-// ------------------------
-// Start Server
-// ------------------------
-app.listen(PORT, () => {
-  console.log(`✅ Backend running at http://localhost:${PORT}`);
-});
+app.listen(PORT, () =>
+  console.log(`✅ SportGPT backend running at http://localhost:${PORT}`)
+);
