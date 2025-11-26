@@ -9,7 +9,15 @@ const app = express();
 // ------------------------
 // CORS: Allow ALL origins, headers, methods
 // ------------------------
-app.use(cors());
+app.use(
+  cors({
+    origin: "*", // allow all origins
+    methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
+    allowedHeaders: ["Origin", "Content-Type", "Authorization"],
+    credentials: true, // note: credentials only work if origin is not '*'
+  })
+);
+
 app.use(express.json());
 
 // ------------------------
