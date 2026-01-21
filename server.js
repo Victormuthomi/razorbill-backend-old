@@ -40,29 +40,6 @@ app.post("/ask", async (req, res) => {
   }
 });
 
-/**
- * 🌐 Universal proxy for streamed.su/api/*
- * Example: GET /api/matches/fight/popular → forwards to https://streamed.su/api/matches/fight/popular
- */
-app.use("/api", async (req, res) => {
-  const streamedPath = req.originalUrl.replace("/api", "");
-  const targetUrl = `https://streamed.su/api${streamedPath}`;
-
-  try {
-    const response = await axios.get(targetUrl, {
-      headers: {
-        "User-Agent": req.headers["user-agent"] || "Mozilla/5.0",
-      },
-    });
-    res.json(response.data);
-  } catch (error) {
-    console.error("🔥 Proxy error:", error.message);
-    res.status(error.response?.status || 500).json({
-      error: "Failed to fetch data from streamed.su",
-      details: error.message,
-    });
-  }
-});
 
 app.listen(PORT, () =>
   console.log(`✅ SportGPT backend running at http://localhost:${PORT}`)
